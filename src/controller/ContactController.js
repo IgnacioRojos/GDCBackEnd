@@ -52,4 +52,43 @@ const getContactByGestionId = async (req, res) => {
   }
 };
 
-module.exports = { createContact, getContactsByEstado, getContactByGestionId };
+// Actualizar estado de un contacto
+const updateContactEstado = async (req, res) => {
+  try {
+    const { gestionId } = req.params;
+    const { estado } = req.body;
+
+    const estadosValidos = ["pendiente", "solucionado", "derivado"];
+    if (!estadosValidos.includes(estado)) {
+      return res.status(400).json({ error: "Estado no válido" });
+    }
+
+    const contacto = await Contact.findOneAndUpdate(
+      { gestionId },
+      { estado },
+      { new: true }
+    );
+
+    if (!contacto) return res.status(404).json({ message: "Gestión no encontrada" });
+
+    res.json(contacto);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Eliminar un contacto
+const deleteContact = async (req, res) => {
+  try {
+    const { gestionId } = req.params;
+    const contacto = await Contact.findOneAndDelete({ gestionId });
+
+    if (!contacto) return res.status(404).json({ message: "Gestión no encontrada" });
+
+    res.json({ message: "Gestión eliminada correctamente" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { createContact, getContactsByEstado, getContactByGestionId, updateContactEstado, deleteContact };

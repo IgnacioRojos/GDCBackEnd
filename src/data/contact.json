@@ -1,0 +1,26 @@
+[
+  {
+    "gestionId": 100001,
+    "cliente": "12345678",
+    "agente": "Agente 1",
+    "motivo": "480",
+    "notas": "Cliente pregunta fecha de vencimiento ya que difiere",
+    "estado": "pendiente"
+  },
+  {
+    "gestionId": 100002,
+    "cliente": "87654321",
+    "agente": "Agente 2",
+    "motivo": "1999",
+    "notas": "Baja de producto",
+    "estado": "derivado"
+  },
+  {
+    "gestionId": 100003,
+    "cliente": "44556677",
+    "agente": "Agente 3",
+    "motivo": "507",
+    "notas": "Cliente gestionó pago online",
+    "estado": "solucionado"
+  }
+]

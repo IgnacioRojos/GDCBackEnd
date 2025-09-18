@@ -1,0 +1,9 @@
+[
+  { "_id": "507", "descripcion": "Consulta sobre pago de la tarjeta de crédito" },
+  { "_id": "838", "descripcion": "Reclamo por servicio mal cobrado" },
+  { "_id": "1999", "descripcion": "Solicitud de baja" },
+  { "_id": "1223", "descripcion": "Solicitud de stop debit por fraude" },
+  { "_id": "480", "descripcion": "consulta por resumen" },
+  { "_id": "100", "descripcion": "Consulta generar del producto" }
+
+]
