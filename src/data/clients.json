@@ -1,5 +1,5 @@
 [
-  { "_id": "12345678", "nombre": "Juan", "apellido": "Pérez", "telefono": "1123456789", "email": "juan.perez@mail.com" },
-  { "_id": "87654321", "nombre": "María", "apellido": "Gómez", "telefono": "1198765432", "email": "maria.gomez@mail.com" },
-  { "_id": "44556677", "nombre": "Carlos", "apellido": "López", "telefono": "1176543210", "email": "carlos.lopez@mail.com" }
+  { "_id": "12345678","dni": "12345678", "nombre": "Juan", "apellido": "Pérez", "telefono": "1123456789", "email": "juan.perez@mail.com" },
+  { "_id": "87654321","dni": "87654321","nombre": "María", "apellido": "Gómez", "telefono": "1198765432", "email": "maria.gomez@mail.com" },
+  { "_id": "44556677","dni": "44556677", "nombre": "Carlos", "apellido": "López", "telefono": "1176543210", "email": "carlos.lopez@mail.com" }
 ]

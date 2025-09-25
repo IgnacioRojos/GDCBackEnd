@@ -9,6 +9,7 @@ const app = express();
 //rutas 
 const clientRoutes = require("./routes/clientRoute");
 const contactRoutes = require("./routes/contactRoute");
+const authRoutes = require("./routes/authRoute");
 
 // Conexión a la base de datos
 connectDB();
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 //rutas api
 app.use("/api/clientes", clientRoutes);
 app.use("/api/contactos", contactRoutes);
+app.use("/api/auth", authRoutes);
 
 // Server
 const PORT = process.env.PORT || 4000;

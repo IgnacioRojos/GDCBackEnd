@@ -1,94 +1,138 @@
 const Contact = require("../models/Contact");
+const Client = require("../models/Clients");
+const Tipificacion = require("../models/Tipificacion");
+const Counter = require("../models/Counter");
 
-// Función para generar número de gestión único
-function generarNumeroGestion() {
-  return "GEST-" + Math.floor(100000 + Math.random() * 900000);
-}
-
-// Crear un contacto
+// Crear un contacto con gestionId único automático
 const createContact = async (req, res) => {
   try {
     const { cliente, agente, motivo, notas, estado } = req.body;
 
-    const nuevoContacto = new Contact({
-      gestionId: generarNumeroGestion(),
-      cliente,
+    // Validar estado explícitamente
+    if (!estado || !["solucionado", "derivado"].includes(estado.toLowerCase())) {
+      return res.status(400).json({ message: "El estado debe ser 'solucionado' o 'derivado'" });
+    }
+
+    // Validar existencia de cliente por DNI
+    const clienteExistente = await Client.findOne({ dni: cliente });
+    if (!clienteExistente) {
+      return res.status(404).json({ message: "Cliente no encontrado" });
+    }
+
+    // Validar existencia de tipificación por código
+    const motivoExistente = await Tipificacion.findOne({ codigo: motivo });
+    if (!motivoExistente) {
+      return res.status(404).json({ message: "Tipificación no encontrada" });
+    }
+
+    // Obtener número de gestión único desde Counter
+    const counter = await Counter.findByIdAndUpdate(
+      { _id: "gestionId" },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    // Crear contacto con dni y codigo en lugar de ObjectId
+    const newContact = new Contact({
+      gestionId: counter.seq,
+      cliente: clienteExistente.dni,      // 🔹 guardamos DNI
       agente,
-      motivo,
+      motivo: motivoExistente.codigo,     // 🔹 guardamos código
       notas,
-      estado
+      estado: estado.toLowerCase()
     });
 
-    await nuevoContacto.save();
-    res.status(201).json(nuevoContacto);
+    const savedContact = await newContact.save();
+    res.status(201).json(savedContact);
+
   } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({ error: "El número de gestión ya existe, intente nuevamente" });
-    }
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Error al crear contacto", error });
   }
 };
 
-// Listar contactos por estado
-const getContactsByEstado = async (req, res) => {
+const getContactsByEstadoYDni = async (req, res) => {
   try {
-    const { estado } = req.params;
-    const contactos = await Contact.find({ estado }).populate("cliente");
-    res.json(contactos);
+    const { estado, dni } = req.params;
+
+    const contactos = await Contact.find({ estado: estado.toLowerCase() })
+      .populate({
+        path: "cliente",
+        match: { dni: dni.toString() },  // 🔹 filtramos por dni dentro del cliente
+        select: "nombre apellido dni telefono email"
+      })
+      .populate("motivo", "codigo descripcion");
+
+    // Filtrar los que realmente tengan cliente (porque match puede dejar null)
+    const filtrados = contactos.filter(c => c.cliente !== null);
+
+    res.json(filtrados);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Error al buscar contactos", error });
   }
 };
 
-// Buscar contacto por gestionId
+// Obtener consulta por gestionId
 const getContactByGestionId = async (req, res) => {
   try {
     const { gestionId } = req.params;
-    const contacto = await Contact.findOne({ gestionId }).populate("cliente");
-    if (!contacto) return res.status(404).json({ msg: "Gestión no encontrada" });
-    res.json(contacto);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+    const contacto = await Contact.findOne({ gestionId: Number(gestionId) })
+      .populate("cliente", "nombre apellido dni telefono email")
+      .populate("motivo", "codigo descripcion");
 
-// Actualizar estado de un contacto
-const updateContactEstado = async (req, res) => {
-  try {
-    const { gestionId } = req.params;
-    const { estado } = req.body;
-
-    const estadosValidos = ["pendiente", "solucionado", "derivado"];
-    if (!estadosValidos.includes(estado)) {
-      return res.status(400).json({ error: "Estado no válido" });
+    if (!contacto) {
+      return res.status(404).json({ message: "Consulta no encontrada" });
     }
 
-    const contacto = await Contact.findOneAndUpdate(
-      { gestionId },
-      { estado },
-      { new: true }
-    );
-
-    if (!contacto) return res.status(404).json({ message: "Gestión no encontrada" });
-
     res.json(contacto);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Error al obtener consulta", error });
   }
 };
 
-// Eliminar un contacto
+// Actualizar consulta
+const updateContact = async (req, res) => {
+  try {
+    const { gestionId } = req.params;
+    const { agente, motivo, notas, estado } = req.body;
+
+    const contacto = await Contact.findOneAndUpdate(
+      { gestionId: Number(gestionId) },
+      { agente, motivo, notas, estado },
+      { new: true }
+    )
+      .populate("cliente", "nombre apellido dni telefono email")
+      .populate("motivo", "codigo descripcion");
+
+    if (!contacto) {
+      return res.status(404).json({ message: "Consulta no encontrada" });
+    }
+
+    res.json(contacto);
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar consulta", error });
+  }
+};
+
+// Eliminar consulta
 const deleteContact = async (req, res) => {
   try {
     const { gestionId } = req.params;
-    const contacto = await Contact.findOneAndDelete({ gestionId });
+    const deleted = await Contact.findOneAndDelete({ gestionId: Number(gestionId) });
 
-    if (!contacto) return res.status(404).json({ message: "Gestión no encontrada" });
+    if (!deleted) {
+      return res.status(404).json({ message: "Consulta no encontrada" });
+    }
 
-    res.json({ message: "Gestión eliminada correctamente" });
+    res.json({ message: "Consulta eliminada correctamente" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Error al eliminar consulta", error });
   }
 };
 
-module.exports = { createContact, getContactsByEstado, getContactByGestionId, updateContactEstado, deleteContact };
+module.exports = {
+  createContact,
+  getContactsByEstadoYDni,
+  getContactByGestionId,
+  updateContact,
+  deleteContact
+};

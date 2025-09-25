@@ -1,15 +1,23 @@
 const mongoose = require("mongoose");
 
 const contactSchema = new mongoose.Schema({
-  gestionId: { type: Number, required: true, unique: true }, // número único
-  cliente: { type: String, ref: "Client", required: true }, // referencia al _id del cliente (DNI)
+  gestionId: { type: Number, required: true, unique: true },
+  cliente: { 
+    type: String,   // 🔹 usar String en lugar de ObjectId
+    ref: "Client", 
+    required: true 
+  },
   agente: { type: String, required: true },
-  motivo: { type: String, required: true }, // código de tipificación (ej: T001)
+  motivo: { 
+    type: String,   // 🔹 usar String en lugar de ObjectId
+    ref: "Tipificacion", 
+    required: true 
+  },
   notas: { type: String },
   estado: { 
     type: String, 
-    enum: ["pendiente", "solucionado", "derivado"], 
-    default: "pendiente" 
+    enum: ["solucionado", "derivado"], 
+    required: true
   }
 }, { timestamps: true });
 
