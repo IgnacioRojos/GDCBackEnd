@@ -16,6 +16,21 @@ connectDB();
   //"https://gestar-frontend.netlify.app" // producción
 //];
 
+//app.use(cors({
+  //origin: function(origin, callback) {
+    // allow requests with no origin (like mobile apps, Postman)
+    //if(!origin) return callback(null, true);
+    //if(allowedOrigins.indexOf(origin) === -1){
+      //const msg = 'El CORS policy no permite este origen.';
+      //return callback(new Error(msg), false);
+   // }
+   // return callback(null, true);
+  //},
+  credentials: true
+//}));
+
+
+
 // Para desarrollo en localhost
 app.use(cors({
   origin: "http://localhost:5173", // tu frontend
@@ -31,6 +46,7 @@ app.use(express.json());
 const clientRoutes = require("./routes/clientRoute");
 const contactRoutes = require("./routes/contactRoute");
 const authRoutes = require("./routes/authRoute");
+const tipiRoutes = require ("./routes/tipiRoute")
 
 // Rutas de ejemplo
 app.get("/", (req, res) => {
@@ -41,6 +57,7 @@ app.get("/", (req, res) => {
 app.use("/api/clientes", clientRoutes);
 app.use("/api/contactos", contactRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/tipificacion", tipiRoutes);
 
 // Server
 const PORT = process.env.PORT || 4000;
