@@ -1,14 +1,20 @@
 const express = require("express");
-const { register, login, updateRole } = require("../controller/authController");
+const { register, login, updateRole, obtenerUsuarios } = require("../controller/authController");
+const { authMiddleware, authorize } = require("../middleware/middleware");
 
 const router = express.Router();
 
-// Registro de usuarios
-router.post("/register", register); // primer supervisor puede registrarse sin token
+// 🔹 Registro de usuarios
+router.post("/register", authMiddleware, authorize("supervisor"), register);
 
 // Login
 router.post("/login", login);
 
-router.put("/role", updateRole);
+// Actualizar rol de usuario (solo supervisores)
+router.put("/role", authMiddleware, authorize("supervisor"), updateRole);
+
+// Traer todos los usuarios (solo supervisores)
+router.get("/users", authMiddleware, authorize("supervisor"), obtenerUsuarios);
+
 
 module.exports = router;

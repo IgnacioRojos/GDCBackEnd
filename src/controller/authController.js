@@ -118,6 +118,20 @@ const updateRole = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+
 };
 
-module.exports = { register, login , updateRole};
+
+const obtenerUsuarios = async () => {
+  try {
+    // Buscamos todos los usuarios, incluyendo password
+    const usuarios = await User.find({}, "username password role").limit(20);;
+    return usuarios;
+  } catch (error) {
+    console.error("Error al obtener usuarios:", error);
+    throw error;
+  }
+};
+
+
+module.exports = { register, login , updateRole, obtenerUsuarios};

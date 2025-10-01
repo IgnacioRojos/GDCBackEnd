@@ -3,42 +3,47 @@ const Client = require("../models/Clients");
 const Tipificacion = require("../models/Tipificacion");
 const Counter = require("../models/Counter");
 
-// Crear un contacto con gestionId único automático
 const createContact = async (req, res) => {
   try {
-    const { cliente, agente, motivo, notas, estado } = req.body;
+    const { cliente, agente, motivo, notas, comentario, estado } = req.body;
 
-    // Validar estado explícitamente
+    // 1️⃣ Validar estado explícitamente
     if (!estado || !["solucionado", "derivado"].includes(estado.toLowerCase())) {
       return res.status(400).json({ message: "El estado debe ser 'solucionado' o 'derivado'" });
     }
 
-    // Validar existencia de cliente por DNI
+    // 2️⃣ Validar comentario si el estado es "solucionado"
+    if (estado.toLowerCase() === "solucionado" && (!comentario || comentario.trim() === "")) {
+      return res.status(400).json({ message: "El comentario es obligatorio cuando el estado es 'solucionado'" });
+    }
+
+    // 3️⃣ Validar existencia de cliente por DNI
     const clienteExistente = await Client.findOne({ dni: cliente });
     if (!clienteExistente) {
       return res.status(404).json({ message: "Cliente no encontrado" });
     }
 
-    // Validar existencia de tipificación por código
+    // 4️⃣ Validar existencia de tipificación por código
     const motivoExistente = await Tipificacion.findOne({ codigo: motivo });
     if (!motivoExistente) {
       return res.status(404).json({ message: "Tipificación no encontrada" });
     }
 
-    // Obtener número de gestión único desde Counter
+    // 5️⃣ Obtener número de gestión único desde Counter
     const counter = await Counter.findByIdAndUpdate(
       { _id: "gestionId" },
       { $inc: { seq: 1 } },
       { new: true, upsert: true }
     );
 
-    // Crear contacto con dni y codigo en lugar de ObjectId
+    // 6️⃣ Crear contacto con DNI y código en lugar de ObjectId
     const newContact = new Contact({
       gestionId: counter.seq,
-      cliente: clienteExistente.dni,      // 🔹 guardamos DNI
+      cliente: clienteExistente.dni,   // 🔹 guardamos DNI
       agente,
-      motivo: motivoExistente.codigo,     // 🔹 guardamos código
+      motivo: motivoExistente.codigo,  // 🔹 guardamos código
       notas,
+      comentario,
       estado: estado.toLowerCase()
     });
 
@@ -46,7 +51,8 @@ const createContact = async (req, res) => {
     res.status(201).json(savedContact);
 
   } catch (error) {
-    res.status(500).json({ message: "Error al crear contacto", error });
+    console.error("Error al crear contacto:", error);
+    res.status(500).json({ message: "Error al crear contacto", error: error.message });
   }
 };
 

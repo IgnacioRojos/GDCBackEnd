@@ -13,7 +13,14 @@ const contactSchema = new mongoose.Schema({
     ref: "Tipificacion", 
     required: true 
   },
-  notas: { type: String },
+  notas: { 
+    type: String, 
+    trim: true
+  },
+  comentario: {
+    type: String, 
+    trim: true
+  },
   estado: { 
     type: String, 
     enum: ["solucionado", "derivado"], 

@@ -1,66 +1,64 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const cors = require("cors"); // <-- import cors
+const cors = require("cors");
 
 dotenv.config();
 
 const app = express();
 
-// Conexión a la base de datos
+// 🔹 Conexión a la base de datos
 connectDB();
 
-// Configurar CORS
-//const allowedOrigins = [
-//  "http://localhost:5173",              // desarrollo
-  //"https://gestar-frontend.netlify.app" // producción
-//];
+// 🔹 Configuración CORS
+const allowedOrigins = [
+  "http://localhost:5173",                // Desarrollo local
+  "https://gestarfrontend.netlify.app",   // Producción Netlify
+];
 
-//app.use(cors({
-  //origin: function(origin, callback) {
-    // allow requests with no origin (like mobile apps, Postman)
-    //if(!origin) return callback(null, true);
-    //if(allowedOrigins.indexOf(origin) === -1){
-      //const msg = 'El CORS policy no permite este origen.';
-      //return callback(new Error(msg), false);
-   // }
-   // return callback(null, true);
-  //},
-  credentials: true
-//}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Permitir requests sin origin (Postman, curl, etc.)
+      if (!origin) return callback(null, true);
 
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = "El CORS policy no permite este origen.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
+// 🔹 Responder preflight
+app.options("*", cors());
 
-// Para desarrollo en localhost
-app.use(cors({
-  origin: "http://localhost:5173", // tu frontend
-  credentials: true // permite enviar cookies o headers de auth
-}));
-
-// Si querés permitir cualquier origen (solo pruebas)
-// app.use(cors());
-
+// 🔹 Middleware
 app.use(express.json());
 
-// Rutas
+// 🔹 Importar rutas
 const clientRoutes = require("./routes/clientRoute");
 const contactRoutes = require("./routes/contactRoute");
 const authRoutes = require("./routes/authRoute");
-const tipiRoutes = require ("./routes/tipiRoute")
+const tipiRoutes = require("./routes/tipiRoute");
 
-// Rutas de ejemplo
+// 🔹 Ruta test
 app.get("/", (req, res) => {
   res.send("API GESTAR funcionando 🚀");
 });
 
-// Rutas API
+// 🔹 Rutas API
 app.use("/api/clientes", clientRoutes);
 app.use("/api/contactos", contactRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/tipificacion", tipiRoutes);
 
-// Server
-const PORT = process.env.PORT || 4000;
+// 🔹 Servidor
+const PORT = process.env.PORT || 4000; // Railway usa su propio PORT
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor GESTAR corriendo en puerto http://localhost:${PORT}`);
+  console.log(`🚀 Servidor GESTAR corriendo en puerto ${PORT}`);
 });

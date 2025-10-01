@@ -5,6 +5,7 @@
     "agente": "Agente 1",
     "motivo": "480",
     "notas": "Cliente pregunta fecha de vencimiento ya que difiere",
+    "comentario":"esta viendo las fechas viejas",
     "estado": "solucionado"
   },
   {
@@ -21,6 +22,7 @@
     "agente": "Agente 3",
     "motivo": "507",
     "notas": "Cliente gestionó pago online",
+    "comentario":"se le informa al cliente que el pago impacto",
     "estado": "solucionado"
   }
 ]
