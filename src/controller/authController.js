@@ -121,17 +121,44 @@ const updateRole = async (req, res) => {
 
 };
 
-
-const obtenerUsuarios = async () => {
+const obtenerUsuarios = async (req, res) => {
   try {
-    // Buscamos todos los usuarios, incluyendo password
-    const usuarios = await User.find({}, "username role").limit(20);;
-    res.json(usuarios);
+    // Buscamos todos los usuarios, solo username y role
+    const usuarios = await User.find({}, "username role").limit(20);
+    res.status(200).json(usuarios);
   } catch (error) {
     console.error("Error al obtener usuarios:", error);
-    throw error;
+    res.status(500).json({ message: "Error al obtener usuarios" });
+  }
+};
+
+const eliminarUsuario = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Validar que venga el ID o username
+    if (!userId) {
+      return res.status(400).json({ message: "Se requiere userId" });
+    }
+
+    // Buscar y eliminar: primero por _id, si no es ObjectId válido, por username
+    let usuario;
+    if (mongoose.Types.ObjectId.isValid(userId)) {
+      usuario = await User.findByIdAndDelete(userId);
+    } else {
+      usuario = await User.findOneAndDelete({ username: userId });
+    }
+
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    res.status(200).json({ message: `Usuario ${usuario.username} eliminado` });
+  } catch (error) {
+    console.error("Error al eliminar usuario:", error);
+    res.status(500).json({ message: "Error al eliminar usuario" });
   }
 };
 
 
-module.exports = { register, login , updateRole, obtenerUsuarios};
+module.exports = { register, login , updateRole, obtenerUsuarios, eliminarUsuario};
