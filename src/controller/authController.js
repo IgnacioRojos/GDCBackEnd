@@ -125,7 +125,7 @@ const updateRole = async (req, res) => {
 const obtenerUsuarios = async () => {
   try {
     // Buscamos todos los usuarios, incluyendo password
-    const usuarios = await User.find({}, "username password role").limit(20);;
+    const usuarios = await User.find({}, "username role").limit(20);;
     return usuarios;
   } catch (error) {
     console.error("Error al obtener usuarios:", error);
