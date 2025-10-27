@@ -1,4 +1,4 @@
-# 📞 GestarBackEnd
+# 📞 GDCBackEnd
 
 Backend desarrollado para la **gestión de atención al cliente**, encargado de manejar usuarios, tipificaciones y consultas, conectándose con una base de datos en **MongoDB**
 , que cuenta también con un **frontend (en producción)** encargado de la interfaz visual y gestión operativa.
