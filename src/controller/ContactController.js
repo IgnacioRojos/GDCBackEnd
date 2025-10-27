@@ -2,7 +2,7 @@ const Contact = require("../models/Contact");
 const Client = require("../models/Clients");
 const Tipificacion = require("../models/Tipificacion");
 const Counter = require("../models/Counter");
-const User = require("../models/User"); // 🔹 Modelo de usuarios
+const User = require("../models/User"); 
 
 // Crear contacto
 const createContact = async (req, res) => {

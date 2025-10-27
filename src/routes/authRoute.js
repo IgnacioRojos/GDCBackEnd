@@ -4,7 +4,7 @@ const { authMiddleware, authorize } = require("../middleware/middleware");
 
 const router = express.Router();
 
-// 🔹 Registro de usuarios
+// Registro de usuarios
 router.post("/register", authMiddleware, authorize("supervisor"), register);
 
 // Login

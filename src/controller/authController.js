@@ -102,7 +102,7 @@ const updateRole = async (req, res) => {
 
     let user;
 
-    // Si es un ObjectId válido → buscar por id
+    // Si es un ObjectId válido, buscar por id
     if (mongoose.Types.ObjectId.isValid(userId)) {
       user = await User.findByIdAndUpdate(userId, { role: newRole }, { new: true });
     } else {

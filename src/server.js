@@ -6,13 +6,13 @@ const cors = require("cors");
 dotenv.config();
 const app = express();
 
-// 🔹 Conexión a la base de datos
+// Conexión a la base de datos
 connectDB();
 
-// 🔹 Railway usa proxy (necesario para HTTPS y cookies seguras)
+// Railway usa proxy (necesario para HTTPS y cookies seguras)
 app.set("trust proxy", 1);
 
-// 🔹 Configuración CORS
+// Configuración CORS
 const allowedOrigins = [
   "http://localhost:5173",                // Desarrollo local
   "https://gestarfrontend.netlify.app",   // Producción Netlify
@@ -31,15 +31,15 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// 🔹 Manejar preflight OPTIONS globalmente
+//Manejar preflight OPTIONS globalmente
 app.options("*", (req, res) => {
   res.sendStatus(200);
 });
 
-// 🔹 Middleware para JSON
+//Middleware para JSON
 app.use(express.json());
 
-// 🔹 Rutas API
+// Rutas API
 const clientRoutes = require("./routes/clientRoute");
 const contactRoutes = require("./routes/contactRoute");
 const authRoutes = require("./routes/authRoute");
@@ -50,14 +50,14 @@ app.use("/api/contactos", contactRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/tipificacion", tipiRoutes);
 
-// 🔹 Ruta test
+//Ruta test
 app.get("/", (req, res) => {
   res.send("API GESTAR funcionando 🚀");
 });
 
-// 🔹 Servidor
+//Servidor
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor GESTAR corriendo en puerto ${PORT}`);
+  console.log(`Servidor GESTAR corriendo en puerto ${PORT}`);
 });
 

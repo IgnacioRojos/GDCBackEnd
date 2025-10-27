@@ -12,7 +12,7 @@ const contactSchema = new mongoose.Schema({
 
   estado: { type: String, enum: ["solucionado", "derivado"], required: true },
 
-  // 🆕 ESTE BLOQUE TIENE QUE ESTAR PRESENTE
+
   historial: [
     {
       notasAnteriores: String,

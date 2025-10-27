@@ -14,7 +14,7 @@ const Counter = require("./models/Counter");
   try {
     // Conexión a Atlas
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ Conectado a MongoDB Atlas");
+    console.log("Conectado a MongoDB Atlas");
 
     // Rutas relativas de los JSON
     const clientesPath = path.join(__dirname, "data/clients.json");
@@ -88,7 +88,7 @@ const Counter = require("./models/Counter");
       }
     }
 
-    console.log("✅ Migración completa a Atlas");
+    console.log("Migración completa a Atlas");
     process.exit();
   } catch (error) {
     console.error("Error migración:", error);

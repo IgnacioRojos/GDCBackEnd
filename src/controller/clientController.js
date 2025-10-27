@@ -35,7 +35,7 @@ const createClient = async (req, res) => {
 const getClientByDni = async (req, res) => {
   try {
     const { dni } = req.params;
-    const cliente = await Client.findById(dni); // busca por _id
+    const cliente = await Client.findById(dni); 
     if (!cliente) return res.status(404).json({ error: "Cliente no encontrado" });
     res.json(cliente);
   } catch (error) {
