@@ -1,7 +1,7 @@
 # 📞 GDCBackEnd
 
 Backend desarrollado para la **gestión de atención al cliente**, encargado de manejar usuarios, tipificaciones y consultas, conectándose con una base de datos en **MongoDB**
-, que cuenta también con un **frontend (en producción)** encargado de la interfaz visual y gestión operativa.
+, que cuenta también con un frontend encargado de la interfaz visual y gestión operativa.
 
 ---
 
@@ -45,12 +45,18 @@ El repositorio incluye los siguientes recursos base (almacenados en formato JSON
 
 ## 🔐 Usuario de prueba
 
-Puedes iniciar sesión con el siguiente usuario de prueba:
+Puedes iniciar sesión con los siguientes usuarios de prueba:
 
 ```
+como supervisor:
+
 USUARIO: ignacio  
 CONTRASEÑA: 123456
 ```
+como agente: 
+
+USUARIO: martin
+contraseña: Ignacio1920
 
 ---
 
@@ -185,7 +191,7 @@ El backend está desplegado en **Railway**, lo que permite acceder al servicio d
 URL: https://gestarbackend-production.up.railway.app/
 
 ```
-🌐 URL de Producción: [pendiente]
+🌐 URL del front end: https://sistemadecontacto.netlify.app/
 ```
 
 ---
