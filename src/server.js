@@ -15,7 +15,7 @@ app.set("trust proxy", 1);
 // Configuración CORS
 const allowedOrigins = [
   "http://localhost:5173",                // Desarrollo local
-  "https://gestarfrontend.netlify.app",   // Producción Netlify
+  "https://sistemadecontacto.netlify.app/",   // Producción Netlify
 ];
 
 app.use(cors({
