@@ -187,8 +187,8 @@ Las colecciones principales son:
 
 ## 📤 Despliegue
 
-El backend está desplegado en **Railway**, lo que permite acceder al servicio desde internet.  
-URL: https://gestarbackend-production.up.railway.app/
+El backend está desplegado en **Render**, lo que permite acceder al servicio desde internet.  
+URL: https://gdcbackend.onrender.com
 
 ```
 🌐 URL del front end: https://sistemadecontacto.netlify.app/
