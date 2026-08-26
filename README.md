@@ -140,7 +140,7 @@ POST /api/consultas
 
 ### 1️⃣ Clonar el repositorio
 ```bash
-git clone https://github.com/IgnacioRojos/GestarBackEnd.git
+git clone https://github.com/IgnacioRojos/GDCBackEnd.git
 cd GestarBackEnd
 ```
 
