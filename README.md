@@ -20,7 +20,7 @@ Este proyecto permite:
 - **Node.js**  
 - **Express.js**  
 - **MongoDB Atlas** (Base de datos en la nube)  
-- **Railway** (Hosting del backend)  
+- **Render** (Hosting del backend)  
 - **Postman** (Pruebas de API)  
 
 ---
@@ -78,8 +78,7 @@ A continuación se listan las tipificaciones actualmente registradas en la base 
 
 ## 🔗 Conexión con el Frontend
 
-El backend está preparado para conectarse con la aplicación frontend del proyecto **Gestar**.  
-🧩 Una vez que el frontend esté en producción, se puede agregar el enlace aquí:
+El backend está conectado en producción con el frontend del proyecto **GDC**, desarrollado en React.
 
 ```
 🔗 URL del Frontend: https://sistemadecontacto.netlify.app/
@@ -141,7 +140,7 @@ POST /api/consultas
 ### 1️⃣ Clonar el repositorio
 ```bash
 git clone https://github.com/IgnacioRojos/GDCBackEnd.git
-cd GestarBackEnd
+cd GDCBackEnd
 ```
 
 ### 2️⃣ Instalar dependencias
